@@ -1,7 +1,7 @@
 import { describe, test } from "vitest";
 import { expect } from "chai";
 import { parsePeopleCsv } from "../src/untestable3.mjs";
-import { parsePeopleRecords, formatGender } from "../src/testable3.mjs";
+import { parsePeopleRecords, formatGender, readPeopleCsv, parsePeopleCsv } from "../src/testable3.mjs";
 
 // example input:
 // Loid,Forger,,Male
@@ -50,6 +50,26 @@ describe("Untestable 3: CSV file parsing", () => {
   test("Gender is formatted to 'x' when gender is 'XYZ'???", async () => {
     expect(formatGender("XYZ")).to.equal("x")
   });
+
+  test("Reading csv with people records returns 2d array", async () => {
+    try {
+      const records = await readPeopleCsv("test/people.csv")
+      expect(records[0]).to.be.a("array");
+    } catch (e) {
+      throw e
+    }
+  })
+
+  test("Parsing csv with people records returns array of parsed people objects", async () => {
+    try {
+      const records = await parsePeopleCsv("test/people.csv")
+      const parsedPeople = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
+      console.log(records, parsedPeople)
+      expect(records).to.deep.equal(parsedPeople);
+    } catch (e) {
+      throw e
+    }
+  })
 
 });
 
