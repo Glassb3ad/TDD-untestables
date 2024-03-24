@@ -1,6 +1,6 @@
 import { describe, test } from "vitest";
 import { expect } from "chai";
-import { diceHandValue, rollDices, diceRoll } from "../src/testable2.mjs";
+import { diceHandValue, playDice, diceRoll } from "../src/testable2.mjs";
 
 const isDiceWithCorrectValue = die => die <= 6 || die >= 1
 
@@ -30,7 +30,7 @@ describe("Untestable 2: a dice game", () => {
     let firstDie = diceRoll()
     let rolledDifferentHand = false
     for (let i = 0; i < 100; i++) {
-      const die1 = rollDices()
+      const die1 = diceRoll()
       if (firstDie !== die1) rolledDifferentHand = true
     }
     expect(rolledDifferentHand).to.be.true
@@ -51,5 +51,10 @@ describe("Untestable 2: a dice game", () => {
     }
     const everyDiceValueRolled = Object.values(diceValuesRolled).every(Boolean)
     expect(everyDiceValueRolled).to.be.true
+  })
+
+  test("A game of dice returns points as number", () => {
+    expect(playDice()).to.be.a("number")
+
   })
 });
