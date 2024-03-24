@@ -1,12 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { parse } from "csv-parse/sync";
 
+export function formatGender(gender) {
+    return gender.charAt(0).toLowerCase()
+}
+
 export function parsePeopleRecords(records) {
     return records.map(([firstName, lastName, age, gender]) => {
         const person = {
             firstName,
             lastName,
-            gender: gender.charAt(0).toLowerCase(),
+            gender: formatGender(gender),
         };
         if (age !== "") {
             person.age = parseInt(age);

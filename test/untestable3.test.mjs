@@ -1,7 +1,7 @@
 import { describe, test } from "vitest";
 import { expect } from "chai";
 import { parsePeopleCsv } from "../src/untestable3.mjs";
-import { parsePeopleRecords } from "../src/testable3.mjs";
+import { parsePeopleRecords, formatGender } from "../src/testable3.mjs";
 
 // example input:
 // Loid,Forger,,Male
@@ -22,12 +22,29 @@ describe("Untestable 3: CSV file parsing", () => {
     expect(everyPersonhasExpectedFields).to.be.true
   });
 
+  test("People with age column are parsed to objects with age field", async () => {
+    const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
+    const haveAgeFields = objectHasField(people[1], "age") && objectHasField(people[2], "age")
+    expect(haveAgeFields).to.be.true
+  });
+
   test("People missing age column are parsed to objects without age field", async () => {
     const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
     const hasAgeField = objectHasField(people[0], "age")
     expect(hasAgeField).to.be.false
   });
 
+  test("Gender is formatted to 'm' when gender is 'Male'", async () => {
+    expect(formatGender("Male")).to.equal("m")
+  });
+
+  test("Gender is formatted to 'f' when gender is 'Female'", async () => {
+    expect(formatGender("Female")).to.equal("f")
+  });
+
+  test("Gender is formatted to 'x' when gender is 'XYZ'???", async () => {
+    expect(formatGender("XYZ")).to.equal("x")
+  });
 
 });
 
