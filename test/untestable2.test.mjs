@@ -35,4 +35,22 @@ describe("Untestable 2: a dice game", () => {
     }
     expect(rolledDifferentHand).to.be.true
   })
+
+  test("Dice roll will eventually return every dice value at least once", () => {
+    const diceValuesRolled = {
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+      5: false,
+      6: false
+    }
+    for (let i = 0; i < 100; i++) {
+      const [die1, die2] = rollDices()
+      if (!diceValuesRolled[die1]) diceValuesRolled[die1] = true
+      if (!diceValuesRolled[die2]) diceValuesRolled[die2] = true
+    }
+    const everyDiceValueRolled = Object.values(diceValuesRolled).every(Boolean)
+    expect(everyDiceValueRolled).to.be.true
+  })
 });
