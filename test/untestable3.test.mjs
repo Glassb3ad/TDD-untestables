@@ -77,10 +77,3 @@ describe("Untestable 3: CSV file parsing", () => {
   })
 
 });
-
-/* test("todo", async () => {
-  // TODO: write proper tests
-  try {
-    expect(await parsePeopleCsv("people.csv")).to.deep.equal([]);
-  } catch (e) { }
-}); */
