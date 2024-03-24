@@ -1,6 +1,6 @@
 import { describe, test } from "vitest";
 import { expect } from "chai";
-import { diceHandValue, rollDices } from "../src/testable2.mjs";
+import { diceHandValue, rollDices, diceRoll } from "../src/testable2.mjs";
 
 const isDiceWithCorrectValue = die => die <= 6 || die >= 1
 
@@ -20,18 +20,18 @@ describe("Untestable 2: a dice game", () => {
   test("Dice roll always returns dices with values between 1 and 6", () => {
     let rolledDiceWithIncorrectValue = false
     for (let i = 0; i < 100; i++) {
-      const [die1, die2] = rollDices()
-      if (!(isDiceWithCorrectValue(die1) && isDiceWithCorrectValue)(die2)) rolledDiceWithIncorrectValue = true
+      const die1 = diceRoll()
+      if (!isDiceWithCorrectValue(die1)) rolledDiceWithIncorrectValue = true
     }
     expect(rolledDiceWithIncorrectValue).to.be.false
   })
 
-  test("Dice roll does not always return equal hands", () => {
-    let firstHand = [rollDices()]
+  test("Dice roll does not always return equal value", () => {
+    let firstDie = diceRoll()
     let rolledDifferentHand = false
     for (let i = 0; i < 100; i++) {
-      const [die1, die2] = rollDices()
-      if (firstHand[0] !== die1 || firstHand[1] == die2) rolledDifferentHand = true
+      const die1 = rollDices()
+      if (firstDie !== die1) rolledDifferentHand = true
     }
     expect(rolledDifferentHand).to.be.true
   })
@@ -46,9 +46,8 @@ describe("Untestable 2: a dice game", () => {
       6: false
     }
     for (let i = 0; i < 100; i++) {
-      const [die1, die2] = rollDices()
-      if (!diceValuesRolled[die1]) diceValuesRolled[die1] = true
-      if (!diceValuesRolled[die2]) diceValuesRolled[die2] = true
+      const die = diceRoll()
+      if (!diceValuesRolled[die]) diceValuesRolled[die] = true
     }
     const everyDiceValueRolled = Object.values(diceValuesRolled).every(Boolean)
     expect(everyDiceValueRolled).to.be.true
