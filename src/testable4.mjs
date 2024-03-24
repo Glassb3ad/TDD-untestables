@@ -1,18 +1,7 @@
 import argon2 from "@node-rs/argon2";
 import pg from "pg";
 
-//Database creates global variable that persists between test runs
-//Singleton pattern creates global variable that persists between test runs
-export class PostgresUserDao {
-  static instance;
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new PostgresUserDao();
-    }
-    return this.instance;
-  }
-
+export class PostgresDbConnection {
   db = new pg.Pool({
     user: process.env.PGUSER,
     host: process.env.PGHOST,
@@ -23,6 +12,14 @@ export class PostgresUserDao {
 
   close() {
     this.db.end();
+  }
+}
+
+export class PostgresUserDao {
+  static db;
+
+  constructor(connection) {
+    this.db = connection.db
   }
 
   #rowToUser(row) {
@@ -50,17 +47,26 @@ export class PostgresUserDao {
   }
 }
 
-//Hard to test password hashes which are unknown to test writer.
-//Relies on database operations but has parts that could be tested independently.
 export class PasswordService {
-  users = PostgresUserDao.getInstance();
+
+  constructor(userDao) {
+    this.users = userDao
+  }
+
+  isCorrectPassword(passwordHash, password) {
+    return argon2.verifySync(passwordHash, password)
+  }
+
+  createNewPasswordHash(newPassword) {
+    return argon2.hashSync(newPassword);
+  }
 
   async changePassword(userId, oldPassword, newPassword) {
     const user = await this.users.getById(userId);
-    if (!argon2.verifySync(user.passwordHash, oldPassword)) {
+    if (!isCorrectPassword(user.passwordHash, oldPassword)) {
       throw new Error("wrong old password");
     }
-    user.passwordHash = argon2.hashSync(newPassword);
+    user.passwordHash = createNewPasswordHash(newPassword)
     await this.users.save(user);
   }
 }
