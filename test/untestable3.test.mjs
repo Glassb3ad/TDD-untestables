@@ -28,6 +28,11 @@ describe("Untestable 3: CSV file parsing", () => {
     expect(haveAgeFields).to.be.true
   });
 
+  test("Age column is parsed to number type", async () => {
+    const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
+    expect(people[1].age).to.be.a("number")
+  });
+
   test("People missing age column are parsed to objects without age field", async () => {
     const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
     const hasAgeField = objectHasField(people[0], "age")
