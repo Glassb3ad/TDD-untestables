@@ -25,4 +25,14 @@ describe("Untestable 2: a dice game", () => {
     }
     expect(rolledDiceWithIncorrectValue).to.be.false
   })
+
+  test("Dice roll does not always return equal hands", () => {
+    let firstHand = [rollDices()]
+    let rolledDifferentHand = false
+    for (let i = 0; i < 100; i++) {
+      const [die1, die2] = rollDices()
+      if (firstHand[0] !== die1 || firstHand[1] == die2) rolledDifferentHand = true
+    }
+    expect(rolledDifferentHand).to.be.true
+  })
 });
