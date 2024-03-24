@@ -22,6 +22,12 @@ describe("Untestable 3: CSV file parsing", () => {
     expect(everyPersonhasExpectedFields).to.be.true
   });
 
+  test("Name of the first person in parsed records matches first person in test data", async () => {
+    const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
+    expect(people[0].firstName).to.equal("Loid")
+    expect(people[0].lastName).to.equal("Forger")
+  });
+
   test("People with age column are parsed to objects with age field", async () => {
     const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
     const haveAgeFields = objectHasField(people[1], "age") && objectHasField(people[2], "age")
@@ -64,7 +70,6 @@ describe("Untestable 3: CSV file parsing", () => {
     try {
       const records = await parsePeopleCsv("test/people.csv")
       const parsedPeople = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
-      console.log(records, parsedPeople)
       expect(records).to.deep.equal(parsedPeople);
     } catch (e) {
       throw e
