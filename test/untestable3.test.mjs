@@ -21,6 +21,14 @@ describe("Untestable 3: CSV file parsing", () => {
     const everyPersonhasExpectedFields = people.every(person => objectHasField(person, "firstName") && objectHasField(person, "lastName") && objectHasField(person, "gender"))
     expect(everyPersonhasExpectedFields).to.be.true
   });
+
+  test("People missing age column are parsed to objects without age field", async () => {
+    const people = parsePeopleRecords(EXAMPLE_PEOPLE_RECORDS)
+    const hasAgeField = objectHasField(people[0], "age")
+    expect(hasAgeField).to.be.false
+  });
+
+
 });
 
 /* test("todo", async () => {
